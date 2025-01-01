@@ -77,7 +77,7 @@ Build the Image:
 ./build_container.sh
 ```
 
-# Define Variables
+# Configuration
 Some parameters can/must to be defined in the `.env` file.
 
 Copy Example File:
@@ -90,4 +90,32 @@ Modify using your preferred Text Editor:
 nano .env
 ```
 
-Currently only `ENABLE_INFINITE_LOOP` is supported.
+In particular, make sure to set a Secret for `WEBUI_SECRET_KEY` (same as Standard `ollama` Installation).
+
+Furthermore, configure the `GPU`, `network` and `volumes` Section of the Compose File according to your Setup.
+
+# Usage
+Start the Container with the usual Docker / Podman Compose Command, first in non-Detached Mode (to check for opvious Issues).:
+```
+podman-compose up
+```
+
+If no Issue arise, stop everything:
+```
+podman-compose down
+```
+
+Then restart the Container in Detached Mode:
+```
+podman-compose up -d
+```
+
+Now Enter the Container:
+```
+podman exec -it docker-llm-benchmark /bin/bash
+```
+
+And Start the Benchmark (Ollama is already running):
+```
+llm_benchmark run --no-sendinfo
+```
