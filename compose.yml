@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  docker-llm-benchmark:
+    image: localhost:5000/local/docker-llm-benchmark:debian-python3.12-latest
+    pull_policy: "always"
+    # pull_policy: "missing"
+    restart: "unless-stopped"
+    container_name: docker-llm-benchmark
+    env_file:
+      - .env
+    environment:
+      - "ENABLE_INFINITE_LOOP=true"
+    volumes:
+      - ~/containers/data/ollama-server:/root/.ollama:rw,z
+    networks:
+      - ollama
+    # Do NOT enable if you already have a separate Ollama Instance running on the System
+    # ports:
+    #   - 11434:11434
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: ["gpu"]
+            count: all
+
+networks:
+  ollama:
+    external: true
